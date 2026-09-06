@@ -45,11 +45,11 @@ export default function DeliveryPage() {
   return (
     <div className="container mx-auto px-4 py-6 max-w-4xl space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Delivery Partner Portal 🛵</h1>
-        <p className="text-sm text-muted-foreground">Accept jobs (18+ verified), pickup from seller, update status live, earn ₹30-50 per delivery + weekly Cashfree Payouts to UPI/Bank.</p>
+        <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>Delivery Hub 🛵</h1>
+        <p className="text-sm text-muted-foreground">Accept book deliveries, pickup from seller, update status live. Earn ₹40 per delivery + weekly Cashfree Payouts.</p>
       </div>
 
-      <Card><CardHeader><CardTitle className="text-base">My Jobs ({myJobs.length})</CardTitle></CardHeader>
+      <Card className="rounded-2xl"><CardHeader><CardTitle className="text-base">My Jobs ({myJobs.length})</CardTitle></CardHeader>
         <CardContent className="space-y-3">
           {myJobs.length === 0 ? <p className="text-sm text-muted-foreground">No jobs yet. Accept an available order below.</p> : myJobs.map((o) => (
             <div key={o.id} className="flex justify-between items-center border rounded-lg p-3">
@@ -64,7 +64,7 @@ export default function DeliveryPage() {
         </CardContent>
       </Card>
 
-      <Card><CardHeader><CardTitle className="text-base">Available Orders (to accept)</CardTitle></CardHeader>
+      <Card className="rounded-2xl"><CardHeader><CardTitle className="text-base">Available Book Orders</CardTitle></CardHeader>
         <CardContent className="space-y-3">
           {orders.length === 0 ? <p className="text-sm text-muted-foreground">No available orders. Create a listing and place an order to test.</p> : orders.filter(o => !o.delivery_partner_id).map((o) => (
             <div key={o.id} className="flex justify-between items-center border rounded-lg p-3">
@@ -75,8 +75,8 @@ export default function DeliveryPage() {
         </CardContent>
       </Card>
 
-      <Card className="bg-muted/30"><CardContent className="p-4 text-xs">
-        <p>Earnings: Base ₹30-50 per delivery (distance-based) + platform covers payout. Payouts weekly via Cashfree Payouts (UPI transfer_mode: upi/banktransfer).</p>
+      <Card className="bg-muted/30 rounded-2xl"><CardContent className="p-4 text-xs">
+        <p>Flat ₹40 delivery fee • Weekly payouts via Cashfree Payouts to UPI/Bank. No contact with buyer/seller needed — just pickup & deliver.</p>
       </CardContent></Card>
     </div>
   )

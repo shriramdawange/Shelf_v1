@@ -12,6 +12,5 @@ export type Order = {
   total_amount: number; platform_fee: number; delivery_fee: number; seller_earnings: number;
   cashfree_order_id: string | null; payment_status: "pending"|"paid"|"failed"|"refunded"; delivery_address: string | null; created_at: string; listings?: Listing;
 }
-export type Message = { id: string; order_id: string; sender_id: string; content: string; created_at: string }
 export type Review = { id: string; order_id: string; reviewer_id: string; reviewee_id: string; rating: number; comment: string | null; created_at: string }
 export type DeliveryAssignment = { id: string; order_id: string; partner_id: string; status: string; assigned_at: string; completed_at: string | null }

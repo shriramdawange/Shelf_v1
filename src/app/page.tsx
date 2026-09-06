@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Search, BookOpen, Truck, ShieldCheck, IndianRupee } from "lucide-react"
+import { Search, BookOpen, Truck, ShieldCheck, Sparkles, ArrowRight, Library, GraduationCap } from "lucide-react"
 import ListingCard from "@/components/ListingCard"
 export const dynamic = "force-dynamic"
 
@@ -15,74 +15,102 @@ export default async function HomePage() {
     listings = data || []
   } catch {}
 
-  // Fallback demo data if Supabase not configured
   const demo = listings.length === 0 ? [
-    { id: "1", title: "Engineering Mathematics by B.S. Grewal - 43rd Edition", category: "Books", condition: "Good", price: 450, images: ["https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400"], course_code: "MA101", subject: "Mathematics" },
-    { id: "2", title: "Data Structures Handwritten Notes (GATE)", category: "Notes", condition: "Like New", price: 250, images: ["https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400"], course_code: "CS201", subject: "DSA" },
-    { id: "3", title: "Arduino Uno Kit - Lab Equipment", category: "Lab Equipment", condition: "New", price: 1200, images: ["https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400"], course_code: "EC301", subject: "Embedded" },
-    { id: "4", title: "Scientific Calculator Casio FX-991EX", category: "Electronics", condition: "Good", price: 900, images: ["https://images.unsplash.com/photo-1587145820266-a5951ee0132f?w=400"], course_code: "ALL", subject: "General" },
+    { id: "1", title: "Engineering Mathematics by B.S. Grewal — 43rd Edition", category: "Books", condition: "Good", price: 450, images: ["https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&auto=format&fit=crop&q=60"], course_code: "MA101", subject: "Mathematics" },
+    { id: "2", title: "Introduction to Algorithms (CLRS) — 3rd Edition", category: "Books", condition: "Like New", price: 650, images: ["https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&auto=format&fit=crop&q=60"], course_code: "CS201", subject: "DSA" },
+    { id: "3", title: "Concepts of Physics by H.C. Verma — Vol 1 & 2", category: "Books", condition: "Good", price: 520, images: ["https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&fit=crop&q=60"], course_code: "PH101", subject: "Physics" },
+    { id: "4", title: "Organic Chemistry by Morrison & Boyd — 7th Ed", category: "Books", condition: "New", price: 780, images: ["https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&auto=format&fit=crop&q=60"], course_code: "CY101", subject: "Chemistry" },
   ] as any[] : listings
 
   return (
-    <div>
+    <div className="overflow-hidden">
       {/* Hero */}
-      <section className="bg-gradient-to-br from-primary/10 via-background to-secondary/30 border-b">
-        <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
+      <section className="relative border-b overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-secondary shelf-pattern" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-transparent to-primary/5" />
+        <div className="container mx-auto px-4 py-12 md:py-20 relative grid md:grid-cols-2 gap-10 items-center">
           <div className="space-y-6">
-            <Badge variant="secondary" className="text-sm">🇮🇳 Trusted by 10,000+ students across India</Badge>
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">Buy & Sell <span className="text-primary">Study Material</span> on Campus</h1>
-            <p className="text-lg text-muted-foreground">Books, notes, lab kits at 50% off. Secure payments via Cashfree, doorstep delivery, and real-time chat with sellers.</p>
-            <div className="flex gap-3">
-              <Link href="/browse"><Button size="lg" className="gap-2"><Search className="h-4 w-4" />Browse Listings</Button></Link>
-              <Link href="/listings/new"><Button size="lg" variant="outline">Sell an Item</Button></Link>
+            <Badge variant="secondary" className="rounded-full px-3 py-1 text-xs font-medium gap-1.5"><Sparkles className="h-3.5 w-3.5" /> Buy-only • No chats • No haggling — just books</Badge>
+            <h1 className="text-4xl md:text-[48px] font-bold leading-[1.05] tracking-tight text-balance" style={{ fontFamily: "var(--font-display)" }}>
+              A calm, curated<br /><span className="text-primary">bookstore for students</span>
+            </h1>
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">Second-hand academic & fiction books at 40–60% off. Sellers list, buyers buy — verified by admins, paid via Cashfree, delivered to your campus. Zero DMs.</p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/browse"><Button size="lg" className="rounded-full px-7 gap-2 shadow-md h-12">Browse Books <ArrowRight className="h-4 w-4" /></Button></Link>
+              <Link href="/listings/new"><Button size="lg" variant="outline" className="rounded-full px-7 h-12 gap-2"><Library className="h-4 w-4" />Sell a Book</Button></Link>
             </div>
-            <div className="flex gap-6 text-sm">
-              <span className="flex items-center gap-1"><ShieldCheck className="h-4 w-4 text-green-600" />Cashfree Secure</span>
-              <span className="flex items-center gap-1"><Truck className="h-4 w-4 text-primary" />Campus Delivery</span>
-              <span className="flex items-center gap-1"><IndianRupee className="h-4 w-4 text-orange-600" />UPI / Cards</span>
+            <div className="flex flex-wrap gap-4 text-sm pt-2">
+              <span className="flex items-center gap-1.5 bg-card border px-3 py-1.5 rounded-full shadow-sm"><ShieldCheck className="h-4 w-4 text-green-600" />Cashfree Secure</span>
+              <span className="flex items-center gap-1.5 bg-card border px-3 py-1.5 rounded-full shadow-sm"><Truck className="h-4 w-4 text-primary" />Delivery ₹40</span>
+              <span className="flex items-center gap-1.5 bg-card border px-3 py-1.5 rounded-full shadow-sm"><GraduationCap className="h-4 w-4 text-orange-600" />Admin Verified</span>
             </div>
           </div>
-          <div className="hidden md:block">
-            <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600" alt="Students" className="rounded-2xl shadow-2xl object-cover" />
+          <div className="relative hidden md:block">
+            <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary rounded-[32px] blur-2xl opacity-50" />
+            <img src="https://images.unsplash.com/photo-1526243741027-d5585c4e06d4?w=700&auto=format&fit=crop&q=60" alt="Library" className="relative rounded-[24px] shadow-2xl object-cover aspect-[4/3] book-shadow" />
+            <Card className="absolute -bottom-6 -left-6 p-4 shadow-xl rounded-2xl border-0 bg-white dark:bg-card max-w-[260px]">
+              <CardContent className="p-0 flex gap-3">
+                <div className="h-14 w-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0"><BookOpen className="h-6 w-6 text-primary" /></div>
+                <div><p className="font-semibold text-sm">Only Books</p><p className="text-xs text-muted-foreground">Academic, Fiction, Non-Fiction. No notes, no equipment — pure reading.</p></div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="container mx-auto px-4 py-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+      {/* Trust rail */}
+      <section className="container mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { icon: BookOpen, title: "Verified Listings", desc: "Moderated by admins" },
-          { icon: ShieldCheck, title: "Secure Payments", desc: "Cashfree PG & Payouts" },
-          { icon: Truck, title: "Quick Delivery", desc: "₹30-50 campus delivery" },
-          { icon: Search, title: "Smart Search", desc: "By course code & subject" },
+          { icon: BookOpen, title: "Verified Listings", desc: "Every book moderated" },
+          { icon: ShieldCheck, title: "Secure Checkout", desc: "Cashfree UPI / Cards" },
+          { icon: Truck, title: "Campus Delivery", desc: "₹40 • Pincode based" },
+          { icon: Search, title: "Smart Discover", desc: "By title, subject, code" },
         ].map((f) => (
-          <Card key={f.title}><CardContent className="p-6 text-center space-y-2"><f.icon className="h-8 w-8 mx-auto text-primary" /><h3 className="font-semibold">{f.title}</h3><p className="text-xs text-muted-foreground">{f.desc}</p></CardContent></Card>
+          <Card key={f.title} className="rounded-2xl border bg-card hover:shadow-md transition-shadow"><CardContent className="p-5 text-center space-y-2"><f.icon className="h-7 w-7 mx-auto text-primary" /><h3 className="font-semibold text-sm">{f.title}</h3><p className="text-xs text-muted-foreground">{f.desc}</p></CardContent></Card>
         ))}
       </section>
 
-      {/* Featured listings */}
-      <section className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold">Featured Listings</h2>
-          <Link href="/browse"><Button variant="ghost">View all →</Button></Link>
+      {/* Featured */}
+      <section className="container mx-auto px-4 py-6">
+        <div className="flex items-end justify-between mb-6 gap-4">
+          <div><h2 className="text-2xl md:text-3xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>Featured Books</h2><p className="text-sm text-muted-foreground">Handpicked for this semester — refresh daily</p></div>
+          <Link href="/browse" className="hidden sm:inline-flex"><Button variant="ghost" className="rounded-full">View all <ArrowRight className="h-4 w-4 ml-1" /></Button></Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
           {demo.map((l: any) => <ListingCard key={l.id} listing={l} />)}
         </div>
       </section>
 
-      {/* India context */}
-      <section className="bg-muted/50 border-y">
-        <div className="container mx-auto px-4 py-8 text-center space-y-3">
-          <h3 className="font-semibold">How EduSwap Works</h3>
-          <div className="grid md:grid-cols-4 gap-4 text-sm">
-            <div className="p-4 bg-card rounded-lg border"><strong>1. List</strong><br />Upload photos to Cloudinary, set price in ₹</div>
-            <div className="p-4 bg-card rounded-lg border"><strong>2. Order</strong><br />Buyer pays via Cashfree (UPI/Card)</div>
-            <div className="p-4 bg-card rounded-lg border"><strong>3. Deliver</strong><br />Partner picks up & updates status live</div>
-            <div className="p-4 bg-card rounded-lg border"><strong>4. Earn</strong><br />Seller gets payout (85% after 15% fee)</div>
+      {/* How it works - buy only */}
+      <section className="border-y bg-muted/20">
+        <div className="container mx-auto px-4 py-10">
+          <h3 className="font-bold text-center text-xl mb-6" style={{ fontFamily: "var(--font-display)" }}>How Shelf Works — Buy Only</h3>
+          <div className="grid md:grid-cols-4 gap-4 text-sm max-w-5xl mx-auto">
+            {[
+              { step: "01", title: "Seller Lists a Book", desc: "Photos + price in ₹. Admin verifies." },
+              { step: "02", title: "Buyer Adds to Cart", desc: "No contact needed. Checkout instantly." },
+              { step: "03", title: "Secure Payment", desc: "Cashfree UPI/Card → order confirmed." },
+              { step: "04", title: "Delivery & Payout", desc: "Partner delivers • Seller gets 85% payout." },
+            ].map((s) => (
+              <div key={s.step} className="p-5 bg-card rounded-2xl border shadow-sm space-y-2">
+                <span className="text-xs font-bold tracking-widest text-primary">{s.step}</span>
+                <p className="font-semibold">{s.title}</p><p className="text-xs text-muted-foreground leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
           </div>
-          <p className="text-xs text-muted-foreground">Pincode-based delivery • GST invoice optional • WhatsApp support • Hindi/English ready</p>
+          <p className="text-center text-xs text-muted-foreground mt-6">No chats • No exchange • No negotiation — the price you see is the price you pay.</p>
         </div>
+      </section>
+
+      {/* CTA */}
+      <section className="container mx-auto px-4 py-10">
+        <Card className="rounded-[24px] border-0 bg-primary text-white overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+          <CardContent className="p-8 md:p-10 relative flex flex-col md:flex-row justify-between gap-6 items-center">
+            <div><h3 className="text-2xl font-bold" style={{ fontFamily: "var(--font-display)" }}>Got books to sell?</h3><p className="text-white/80 text-sm mt-1">List in 45 seconds. Cloudinary CDN, auto-optimized.</p></div>
+            <Link href="/listings/new"><Button variant="secondary" className="rounded-full bg-white text-primary hover:bg-white/90 gap-2">Sell a Book <ArrowRight className="h-4 w-4" /></Button></Link>
+          </CardContent>
+        </Card>
       </section>
     </div>
   )

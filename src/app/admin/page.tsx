@@ -36,8 +36,8 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-6">
-      <h1 className="text-2xl font-bold">Admin Panel 🛡️</h1>
-      <p className="text-sm text-muted-foreground">User management, listing moderation, order oversight, payout management, analytics. RLS + middleware protection (demo: open).</p>
+      <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>Admin — Shelf 🛡️</h1>
+      <p className="text-sm text-muted-foreground">Books-only moderation • Order oversight • Payouts • No P2P chats to monitor.</p>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card><CardContent className="p-6 text-center"><p className="text-2xl font-bold">{stats.users}</p><p className="text-xs text-muted-foreground">Users</p></CardContent></Card>

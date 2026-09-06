@@ -79,19 +79,20 @@ export default function CheckoutPage() {
 
   return (
     <div className="container mx-auto px-4 py-6 max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">Checkout</h1>
-      <Card><CardHeader><CardTitle>Delivery Details 🇮🇳</CardTitle></CardHeader>
+      <h1 className="text-3xl font-bold tracking-tight" style={{ fontFamily: "var(--font-display)" }}>Checkout</h1>
+      <p className="text-sm text-muted-foreground -mt-4">Buy-only • Pay and get delivery — no chats</p>
+      <Card className="rounded-2xl"><CardHeader><CardTitle className="text-base">Delivery Details 🇮🇳</CardTitle></CardHeader>
         <CardContent className="space-y-3">
-          <div><Label>Delivery Address *</Label><Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Hostel / Street, City, State" /></div>
+          <div><Label>Delivery Address *</Label><Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Hostel / Street, City, State" className="rounded-xl" /></div>
           <div className="grid grid-cols-2 gap-3">
-            <div><Label>Pincode * (6 digits)</Label><Input value={pincode} onChange={(e) => setPincode(e.target.value)} placeholder="110001" maxLength={6} /></div>
-            <div><Label>Phone (+91) *</Label><Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="9876543210" /></div>
+            <div><Label>Pincode * (6 digits)</Label><Input value={pincode} onChange={(e) => setPincode(e.target.value)} placeholder="110001" maxLength={6} className="rounded-xl" /></div>
+            <div><Label>Phone (+91) *</Label><Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="9876543210" className="rounded-xl" /></div>
           </div>
-          <p className="text-xs text-muted-foreground">Delivery fee ₹40 • Cashfree supports UPI, Cards, Netbanking, Wallets</p>
+          <p className="text-xs text-muted-foreground">Delivery fee ₹40 • Cashfree supports UPI, Cards, Netbanking</p>
         </CardContent>
       </Card>
 
-      <Card><CardContent className="p-4 space-y-2 text-sm">
+      <Card className="rounded-2xl"><CardContent className="p-4 space-y-2 text-sm">
         <div className="flex justify-between"><span>Subtotal ({items.length} items)</span><span>{formatINR(subtotal)}</span></div>
         <div className="flex justify-between"><span>Platform fee (15%)</span><span>{formatINR(platformFee)}</span></div>
         <div className="flex justify-between"><span>Delivery</span><span>{formatINR(deliveryFee)}</span></div>
@@ -99,12 +100,12 @@ export default function CheckoutPage() {
       </CardContent></Card>
 
       {!paymentSessionId ? (
-        <Button onClick={handleCreateOrder} disabled={loading} className="w-full py-6 text-lg">{loading ? "Creating order..." : `Pay ${formatINR(grandTotal)} with Cashfree`}</Button>
+        <Button onClick={handleCreateOrder} disabled={loading} className="w-full py-6 text-lg rounded-full">{loading ? "Creating order..." : `Pay ${formatINR(grandTotal)} with Cashfree`}</Button>
       ) : (
         <div className="space-y-3">
           <p className="text-sm text-green-600 text-center">Order created! Complete payment:</p>
           <CashfreeCheckout paymentSessionId={paymentSessionId} orderId={createdOrderId!} />
-          <Button variant="outline" className="w-full" onClick={() => { clear(); router.push(`/orders/${createdOrderId}`) }}>Skip Payment (Demo) → View Order</Button>
+          <Button variant="outline" className="w-full rounded-full" onClick={() => { clear(); router.push(`/orders/${createdOrderId}`) }}>Skip Payment (Demo) → View Order</Button>
         </div>
       )}
     </div>

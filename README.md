@@ -1,12 +1,12 @@
-# EduSwap - Educational Marketplace MVP 🇮🇳
+# Shelf — Curated Books for Students 🇮🇳
 
-Full-stack Next.js 14 marketplace for students to buy/sell books, notes, lab equipment with Cloudinary + Cashfree + Supabase.
+Buy-only bookstore for second-hand academic & fiction books. No chats, no exchange, no haggling — just browse, buy, and get delivery.
 
 ## Stack
 - Next.js 14 App Router, TypeScript, Tailwind CSS, shadcn/ui, next-themes
-- Supabase (Auth, PostgreSQL, Realtime, RLS), Zustand, TanStack Query
-- Cloudinary (25GB free, f_auto/q_auto, thumbs 300x300, medium 800x600)
-- Cashfree PG + Payouts (UPI/Card/Netbanking), Axios
+- Supabase (Auth, PostgreSQL, Realtime, RLS), Zustand
+- Cloudinary (25GB free, f_auto/q_auto, 300x300 thumb / 800x600 medium)
+- Cashfree PG + Payouts (UPI/Card/Netbanking)
 
 ## Quick Start
 ```bash
@@ -16,43 +16,30 @@ npm run dev # http://localhost:3000
 ```
 
 ## Env Vars
-See `.env.example`. Need Supabase URL/keys, Cloudinary cloudName/apiKey/secret + upload preset `eduswap_unsigned` (unsigned), Cashfree App ID/Secret, webhook secret, `NEXT_PUBLIC_APP_URL`.
+See `.env.example`. Need Supabase URL/keys, Cloudinary cloudName + `eduswap_unsigned` preset, Cashfree sandbox keys, `NEXT_PUBLIC_APP_URL`.
 
-## Cashfree Setup
-1. Create account https://www.cashfree.com → Dashboard → Developers → API Keys
-2. Apply for Payouts product separately
-3. Set webhook URL: `https://yourdomain.com/api/webhooks/cashfree`
-4. Test with sandbox credentials (`CASHFREE_ENV=sandbox`)
-
-**Flow:** Buyer Buy Now → POST `/api/cashfree/create-order` → `payment_session_id` → `<CashfreeCheckout>` (cashfree-js) → redirect → webhook `POST /api/webhooks/cashfree` verifies `x-webhook-signature` (HMAC sha256 base64) → updates `orders` → notify seller → delivery.
-
-Split: platform 15% + ₹40 delivery, seller gets 85%. Payout via `createPayout` to beneficiary UPI/bank (weekly).
+## Flow (Buy-only, no contact)
+`sellers list Books` → `buyer Browse /cart` → `/checkout` (pincode + phone) → `POST /api/cashfree/create-order` → `payment_session_id` → `<CashfreeCheckout>` → `POST /api/webhooks/cashfree` (HMAC) → `orders` → delivery.
+- Split: platform 15% + ₹40 delivery, seller 85%
+- No chat, no P2P negotiation — price is final
 
 ## Supabase
-Run `supabase/migrations/001_initial.sql` in SQL Editor. Enable Realtime for `messages` + `orders`. Configure Google OAuth in Auth settings. Set RLS policies as in migration.
+Run `supabase/migrations/001_initial.sql` + `002_book_only.sql`. Enable Realtime for `orders`. RLS as per migration.
+Tables: profiles, listings (category = 'Books'), orders, order_items, reviews, delivery_assignments.
 
-Tables: profiles, listings, orders, order_items, messages, reviews, delivery_assignments. See migration for schema.
-
-Cloudinary: Create unsigned upload preset `eduswap_unsigned`, folder `eduswap/listings/{user_id}/`, delivery `f_auto,q_auto`.
+Cloudinary: unsigned preset `eduswap_unsigned`, folder `shelf/books/`.
 
 ## Key Paths
-- `/` - landing + featured
-- `/browse` - search/filter (category, subject, course_code, price, condition)
-- `/listings/[id]` - gallery + add to cart
-- `/listings/new` - create (Cloudinary upload)
-- `/cart` → `/checkout` → Cashfree → `/orders/[id]` (tracking + WhatsApp-style chat via Realtime)
-- `/delivery` - partner accepts jobs, updates status
-- `/admin` - moderation, payouts, revenue, CSV export
-- Auth: `/login`, `/register` (email + Google OAuth, roles: buyer/seller/delivery/admin)
+- `/` - curated hero + featured books
+- `/browse` - search (title, subject, course_code) + condition + price
+- `/listings/[id]` - gallery + Add to Cart / Buy Now
+- `/listings/new` - sell a book (Books only)
+- `/cart` → `/checkout` → Cashfree → `/orders/[id]` (live timeline, no chat)
+- `/orders`, `/delivery`, `/admin`
+- Auth: `/login`, `/register`
 
 ## Deploy (Vercel)
-- Push to git, import in Vercel, set env vars, set Cashfree webhook to `https://your-vercel-url/api/webhooks/cashfree`, run migration.
-
-## Production Checklist
-- Add Cashfree IP whitelist, domain to return URLs
-- Add Sentry/Vercel Analytics, PWA icons
-- Rate limit payment endpoints, validate image type/size, XSS/CSRF via Next.js defaults
-- ARIA labels, keyboard nav, skeletons, toasts, empty states done
+Push to git, import, set env vars, set Cashfree webhook to `https://your-url/api/webhooks/cashfree`, run migrations.
 
 ## Demo without Supabase/Cashfree
-App works in demo mode: browse shows sample data, checkout creates local demo order, chat/payout show toasts. Configure env for full functionality.
+App runs in demo mode: browse shows sample books, checkout demo-confirms order.
