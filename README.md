@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduSwap - Educational Marketplace MVP 🇮🇳
 
-## Getting Started
+Full-stack Next.js 14 marketplace for students to buy/sell books, notes, lab equipment with Cloudinary + Cashfree + Supabase.
 
-First, run the development server:
+## Stack
+- Next.js 14 App Router, TypeScript, Tailwind CSS, shadcn/ui, next-themes
+- Supabase (Auth, PostgreSQL, Realtime, RLS), Zustand, TanStack Query
+- Cloudinary (25GB free, f_auto/q_auto, thumbs 300x300, medium 800x600)
+- Cashfree PG + Payouts (UPI/Card/Netbanking), Axios
 
+## Quick Start
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local # fill vars
+npm run dev # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Env Vars
+See `.env.example`. Need Supabase URL/keys, Cloudinary cloudName/apiKey/secret + upload preset `eduswap_unsigned` (unsigned), Cashfree App ID/Secret, webhook secret, `NEXT_PUBLIC_APP_URL`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Cashfree Setup
+1. Create account https://www.cashfree.com → Dashboard → Developers → API Keys
+2. Apply for Payouts product separately
+3. Set webhook URL: `https://yourdomain.com/api/webhooks/cashfree`
+4. Test with sandbox credentials (`CASHFREE_ENV=sandbox`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Flow:** Buyer Buy Now → POST `/api/cashfree/create-order` → `payment_session_id` → `<CashfreeCheckout>` (cashfree-js) → redirect → webhook `POST /api/webhooks/cashfree` verifies `x-webhook-signature` (HMAC sha256 base64) → updates `orders` → notify seller → delivery.
 
-## Learn More
+Split: platform 15% + ₹40 delivery, seller gets 85%. Payout via `createPayout` to beneficiary UPI/bank (weekly).
 
-To learn more about Next.js, take a look at the following resources:
+## Supabase
+Run `supabase/migrations/001_initial.sql` in SQL Editor. Enable Realtime for `messages` + `orders`. Configure Google OAuth in Auth settings. Set RLS policies as in migration.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tables: profiles, listings, orders, order_items, messages, reviews, delivery_assignments. See migration for schema.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Cloudinary: Create unsigned upload preset `eduswap_unsigned`, folder `eduswap/listings/{user_id}/`, delivery `f_auto,q_auto`.
 
-## Deploy on Vercel
+## Key Paths
+- `/` - landing + featured
+- `/browse` - search/filter (category, subject, course_code, price, condition)
+- `/listings/[id]` - gallery + add to cart
+- `/listings/new` - create (Cloudinary upload)
+- `/cart` → `/checkout` → Cashfree → `/orders/[id]` (tracking + WhatsApp-style chat via Realtime)
+- `/delivery` - partner accepts jobs, updates status
+- `/admin` - moderation, payouts, revenue, CSV export
+- Auth: `/login`, `/register` (email + Google OAuth, roles: buyer/seller/delivery/admin)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy (Vercel)
+- Push to git, import in Vercel, set env vars, set Cashfree webhook to `https://your-vercel-url/api/webhooks/cashfree`, run migration.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Production Checklist
+- Add Cashfree IP whitelist, domain to return URLs
+- Add Sentry/Vercel Analytics, PWA icons
+- Rate limit payment endpoints, validate image type/size, XSS/CSRF via Next.js defaults
+- ARIA labels, keyboard nav, skeletons, toasts, empty states done
+
+## Demo without Supabase/Cashfree
+App works in demo mode: browse shows sample data, checkout creates local demo order, chat/payout show toasts. Configure env for full functionality.
